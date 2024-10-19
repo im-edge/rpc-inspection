@@ -33,6 +33,28 @@ class MetaDataMethod implements JsonSerialization
         $this->returnType = $returnType;
     }
 
+    /**
+     * Hint: returnType and requestType are probably useless
+     * They do exist for compatibility with gipfl\OpenRpc
+     *
+     * @param object{
+     *     name: string,
+     *     type: string,
+     *     requestType: string,
+     *     title: ?string,
+     *     description: ?string,
+     *     parameters: array<int, object{
+     *         name: string,
+     *         type: string,
+     *         isVariadic: ?bool,
+     *         isOptional: ?bool,
+     *        description: ?string,
+     *     }>,
+     *     returnType: ?string,
+     *     resultType: ?string,
+     * } $any
+     * @return MetaDataMethod
+     */
     public static function fromSerialization($any): MetaDataMethod
     {
         // object(stdClass)#320 (6) {

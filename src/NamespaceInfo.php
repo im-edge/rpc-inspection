@@ -7,6 +7,7 @@ use gipfl\IcingaWeb2\Url;
 use ipl\Html\BaseHtmlElement;
 use ipl\Html\Html;
 use ipl\Html\HtmlElement;
+use stdClass;
 
 use function implode;
 
@@ -14,17 +15,35 @@ class NamespaceInfo extends BaseHtmlElement
 {
     protected $tag = 'ul';
 
+    /**
+     * @var array<string, object{
+     *      name: string,
+     *      type: string,
+     *      requestType: string,
+     *      title: ?string,
+     *      description: ?string,
+     *      parameters: array<int, object{
+     *          name: string,
+     *          type: string,
+     *          isVariadic: ?bool,
+     *          isOptional: ?bool,
+     *          description: ?string,
+     *      }>,
+     *      returnType: ?string,
+     *      resultType: ?string,
+     *  }>
+     */
     protected array $info;
     protected Url $baseUrl;
 
-    public function __construct($info, Url $baseUrl)
+    public function __construct(stdClass $info, Url $baseUrl)
     {
         $this->info = (array) $info;
         ksort($this->info);
         $this->baseUrl = $baseUrl;
     }
 
-    protected function assemble()
+    protected function assemble(): void
     {
         $formerNamespace = null;
         $methods = Html::tag('ul'); // unused, but makes IDE happy
@@ -57,7 +76,17 @@ class NamespaceInfo extends BaseHtmlElement
         ]);
     }
 
-    protected function renderParameters($parameters): string
+    /**
+     * @param array<int, object{
+     *     name: string,
+     *     type: string,
+     *     isVariadic: ?bool,
+     *     isOptional: ?bool,
+     *     description: ?string,
+     * }> $parameters
+     * @return string
+     */
+    protected function renderParameters(array $parameters): string
     {
         $list = [];
         foreach ($parameters as $parameter) {

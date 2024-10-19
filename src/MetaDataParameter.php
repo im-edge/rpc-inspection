@@ -28,6 +28,16 @@ class MetaDataParameter implements JsonSerialization
         $this->description = $description;
     }
 
+    /**
+     * @param object{
+     *     name: string,
+     *     type: string,
+     *     isVariadic: ?bool,
+     *     isOptional: ?bool,
+     *     description: ?string,
+     * } $any
+     * @return MetaDataParameter
+     */
     public static function fromSerialization($any): MetaDataParameter
     {
         if (! is_object($any)) {
