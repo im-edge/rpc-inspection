@@ -35,7 +35,14 @@ class MetaDataMethod implements JsonSerialization
 
     public static function fromSerialization($any): MetaDataMethod
     {
-        // object(stdClass)#320 (6) { ["name"]=> string(19) "getAvailableMethods" ["requestType"]=> string(7) "request" ["resultType"]=> NULL ["parameters"]=> array(0) { } ["title"]=> NULL ["description"]=> string(0) "" }
+        // object(stdClass)#320 (6) {
+        //   ["name"]=> string(19) "getAvailableMethods"
+        //   ["requestType"]=> string(7) "request"
+        //   ["resultType"]=> NULL
+        //   ["parameters"]=> array(0) { }
+        //   ["title"]=> NULL
+        //   ["description"]=> string(0) ""
+        // }
         $self = new MetaDataMethod(
             $any->name,
             $any->type ?? $any->requestType,
