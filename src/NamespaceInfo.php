@@ -65,7 +65,7 @@ class NamespaceInfo extends BaseHtmlElement
                 '%s(%s): %s',
                 Html::tag('strong', $method->name),
                 $this->renderParameters($method->parameters),
-                $method->returnType
+                self::renderDataType($method->returnType)
             ), $this->baseUrl->with([
                 'method' => $name
             ])),
@@ -74,6 +74,18 @@ class NamespaceInfo extends BaseHtmlElement
                 Html::tag('i', $method->description),
             ] : null,
         ]);
+    }
+
+    protected static function renderDataType(string $type)
+    {
+        if (strpos($type, '\\') === false) {
+            return $type;
+        }
+
+        $parts = explode('\\', trim($type, '\\'));
+        return Html::tag('span', [
+            'title' => $type
+        ], array_pop($parts));
     }
 
     /**
@@ -86,13 +98,16 @@ class NamespaceInfo extends BaseHtmlElement
      * }> $parameters
      * @return string
      */
-    protected function renderParameters(array $parameters): string
+    protected function renderParameters(array $parameters): array
     {
-        $list = [];
+        $result = [];
         foreach ($parameters as $parameter) {
-            $list[] = $parameter->type . ' $' . $parameter->name;
+            if (! empty($result)) {
+                $result[] = ', ';
+            }
+            $result[] = Html::sprintf('%s $%s', self::renderDataType($parameter->type), $parameter->name);
         }
 
-        return implode(', ', $list);
+        return $result;
     }
 }
